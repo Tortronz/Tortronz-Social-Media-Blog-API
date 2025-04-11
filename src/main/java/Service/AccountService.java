@@ -20,7 +20,7 @@ public class AccountService {
     }
 
     /**
-     * Constructor for a BookService when a BookDAO is provided.
+     * Constructor for a AccountService when a AccountDAO is provided.
      * Used for mocking AccountDAO in the test cases.
      * 
      * @param accountDAO
