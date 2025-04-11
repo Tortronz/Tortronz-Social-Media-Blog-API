@@ -23,41 +23,7 @@ import Util.ConnectionUtil;
  * time_posted_epoch    bigint          Time message was posted
  */
 public class MessageDAO {
-    /**
-     * Gets all messages in chronological post order.
-     * 
-     * @return  Arraylist of all messages
-     */
-    public List<Message> getAllMessages() {
-        Connection connection = ConnectionUtil.getConnection();
-        List<Message> messages = new ArrayList<>();
-
-        try {
-            // Make SQL statement and execute it
-            String sql = "SELECT * FROM message ORDER BY time_posted_epoch";
-            PreparedStatement ps = connection.prepareStatement(sql);
-
-            ResultSet rs = ps.executeQuery();
-
-
-            // Store all retrieved messages in a list
-            while(rs.next()){
-                Message message = new Message(
-                    rs.getInt(1),
-                    rs.getInt(2),
-                    rs.getString(3),
-                    rs.getLong(4));
-                messages.add(message);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        return messages;
-    }
-
-
-
+    // CREATE OPERATIONS //
     /**
      * This creates/inserts a new message into the "message" database table.
      * 
@@ -102,4 +68,123 @@ public class MessageDAO {
 
         return null;    // Occurs if creation failed
     }
+
+
+
+    // READ OPERATIONS //
+    /**
+     * Gets all messages in chronological post order.
+     * 
+     * @return  Arraylist of all messages
+     */
+    public List<Message> getAllMessages() {
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> messages = new ArrayList<>();
+
+        try {
+            // Make SQL statement and execute it
+            String sql = "SELECT * FROM message ORDER BY time_posted_epoch";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+
+            // Store all retrieved messages in a list
+            while(rs.next()){
+                Message message = new Message(
+                    rs.getInt(1),
+                    rs.getInt(2),
+                    rs.getString(3),
+                    rs.getLong(4));
+                messages.add(message);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return messages;
+    }
+
+
+
+    /**
+     * Gets all messages in chronological post order by one account.
+     * 
+     * @param account_id    ID of the account that we want all messages from
+     * @return  Arraylist of all messages by one account
+     */
+    public List<Message> getAllMessagesByAccountId(int account_id) {
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> messages = new ArrayList<>();
+
+        try {
+            // Make SQL statement and execute it
+            String sql = "SELECT * FROM message WHERE posted_by = ? ORDER BY time_posted_epoch";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, account_id);
+
+            ResultSet rs = ps.executeQuery();
+
+
+            // Store all retrieved messages in a list
+            while(rs.next()){
+                Message message = new Message(
+                    rs.getInt(1),
+                    rs.getInt(2),
+                    rs.getString(3),
+                    rs.getLong(4));
+                messages.add(message);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return messages;
+    }
+
+
+
+    /**
+     * Gets message with the corresponding ID.
+     * 
+     * @param message_id    ID of the message that we want
+     * @return  Singular message with the specified ID
+     */
+    public Message getMessageById(int message_id) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            // Make SQL statement and execute it
+            String sql = "SELECT * FROM message WHERE message_id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, message_id);
+
+            ResultSet rs = ps.executeQuery();
+
+
+            // Store retrieved message and return it
+            while(rs.next()){
+                Message message = new Message(
+                    rs.getInt(1),
+                    rs.getInt(2),
+                    rs.getString(3),
+                    rs.getLong(4));
+                return message;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;    // Occurs if retrieval failed
+    }
+
+
+
+    // UPDATE OPERATIONS //
+
+
+
+    // DELETE OPERATIONS //
 }
