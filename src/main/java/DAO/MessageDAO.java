@@ -183,8 +183,51 @@ public class MessageDAO {
 
 
     // UPDATE OPERATIONS //
+    /**
+     * Updates the text of a message.
+     * 
+     * @param message_id    ID of the message we want to update
+     * @param message       Message object with new text to replace the old
+     *                      message text with
+     */
+    public void updateMessageTextById(int message_id, Message message) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            // Make SQL statement and execute it
+            String sql = "UPDATE message SET text = ? WHERE message_id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(1, message.getMessage_text());
+            ps.setInt(2, message_id);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
 
 
     // DELETE OPERATIONS //
+    /**
+     * Deletes message with the corresponding ID.
+     * 
+     * @param message_id    ID of the message that we want to delete
+     */
+    public void deleteMessageById(int message_id) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            // Make SQL statement and execute it
+            String sql = "DELETE FROM message WHERE message_id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, message_id);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
