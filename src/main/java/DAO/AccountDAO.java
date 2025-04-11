@@ -29,7 +29,7 @@ public class AccountDAO {
      * @return  The successfully registered account, or "null" if registration
      *          failed
      */
-    public Account registerAccount(Account account) {
+    public Account insertAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection();
         try {
             // Make SQL statement and execute it
@@ -51,7 +51,8 @@ public class AccountDAO {
                 // Return successfully registered account
                 return new Account( generated_account_id,
                                     account.getUsername(),
-                                    account.getPassword());
+                                    account.getPassword()
+                );
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
