@@ -13,7 +13,7 @@ import Model.Message;
 public class MessageService {
     public MessageDAO messageDAO;
     
-    // CREATE OPERATIONS //
+    // CONSTRUCTORS //
     /**
      * No-args constructor for MessageService which creates an MessageDAO.
      */
@@ -31,6 +31,7 @@ public class MessageService {
         this.messageDAO = messageDAO;
     }
 
+    // CREATE OPERATIONS //
     /**
      * This registers a new message into the "message" database table.
      * 

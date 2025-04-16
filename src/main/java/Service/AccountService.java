@@ -11,7 +11,7 @@ import Model.Account;
 public class AccountService {
     public AccountDAO accountDAO;
     
-    // CREATE OPERATIONS //
+    // CONSTRUCTORS //
     /**
      * No-args constructor for AccountService which creates an AccountDAO.
      */
@@ -29,6 +29,7 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
 
+    // CREATE OPERATIONS //
     /**
      * This registers a new account into the "account" database table.
      * 

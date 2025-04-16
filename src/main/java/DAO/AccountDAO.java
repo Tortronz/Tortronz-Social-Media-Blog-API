@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import Model.Account;
+
 import Util.ConnectionUtil;
 
 /**
@@ -34,7 +35,7 @@ public class AccountDAO {
         try {
             // Make SQL statement and execute it
             String sql = "INSERT INTO account (username, password) VALUES (?, ?)";
-            PreparedStatement ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             ps.setString(1, account.getUsername());
             ps.setString(2, account.getPassword());
