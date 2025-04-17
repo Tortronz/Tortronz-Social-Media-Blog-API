@@ -68,7 +68,8 @@ public class MessageService {
      * Gets message with the corresponding ID.
      * 
      * @param message_id    ID of the message that we want
-     * @return  Singular message with the specified ID
+     * @return  Singular message with the specified ID, or "null" if it wasn't
+     *          successfully retrieved
      */
     public Message getMessage(int message_id) {
         return this.messageDAO.getMessageById(message_id);
@@ -92,12 +93,11 @@ public class MessageService {
 
     // DELETE OPERATIONS
     /**
-     * ++++NEEDS WORK++++
      * Deletes message with the corresponding ID.
      * 
      * @param message_id    ID of the message that we want to delete
      */
-    public void deleteMessageById(int message_id) {
-        this.messageDAO.deleteMessageById(message_id);
+    public Message deleteMessageById(int message_id) {
+        return this.messageDAO.deleteMessageById(message_id);
     }
 }

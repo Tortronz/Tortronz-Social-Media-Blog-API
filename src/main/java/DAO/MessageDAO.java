@@ -31,7 +31,6 @@ public class MessageDAO {
      * it's auto-incremented.
      * 
      * @param message   The new message being created
-     * 
      * @return  The successfully created message, or "null" if creation
      *          failed
      */
@@ -149,7 +148,8 @@ public class MessageDAO {
      * Gets message with the corresponding ID.
      * 
      * @param message_id    ID of the message that we want
-     * @return  Singular message with the specified ID
+     * @return  Singular message with the specified ID, or "null" if retrieval
+     *          failed
      */
     public Message getMessageById(int message_id) {
         Connection connection = ConnectionUtil.getConnection();
@@ -165,7 +165,7 @@ public class MessageDAO {
 
 
             // Store retrieved message and return it
-            while(rs.next()){
+            if(rs.next()){
                 Message message = new Message(
                     rs.getInt(1),
                     rs.getInt(2),
@@ -214,8 +214,10 @@ public class MessageDAO {
      * Deletes message with the corresponding ID.
      * 
      * @param message_id    ID of the message that we want to delete
+     * @return  The message that was deleted, or "null" if the message wasn't
+     *          deleted
      */
-    public void deleteMessageById(int message_id) {
+    public Message deleteMessageById(int message_id) {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
@@ -225,9 +227,17 @@ public class MessageDAO {
 
             ps.setInt(1, message_id);
 
+            Message message = getMessageById(message_id);
+
             ps.executeUpdate();
+
+            if (ps.getUpdateCount() == 1) {
+                return message;
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        return null;    // Occurs if no message was deleted
     }
 }

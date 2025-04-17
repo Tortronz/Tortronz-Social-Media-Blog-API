@@ -41,48 +41,18 @@ public class SocialMediaController {
 
         // Message Handlers
         app.get("/messages", this::getAllMessagesHandler);
-        app.get("/messages/{account_id}", this::getAllMessagesByAccountHandler);
+        app.get("/accounts/{account_id}/messages", this::getAllMessagesByAccountHandler);
         app.get("/messages/{message_id}", this::getMessageByIdHandler);
-        app.post("/messages", this::postMessageHandler);
-        app.put("/messages/{message_id}", this::putMessageHandler);
+        app.post("/messages", this::postCreateMessageHandler);
+        app.put("/messages/{message_id}", this::putUpdateMessageHandler);
         app.delete("/messages/{message_id}", this::deleteMessageHandler);
 
         return app;
     }
 
-    /**
-     * Handler to retrieve all messages.
-     * 
-     * @param ctx   data handler for HTTP requests and responses, provided the
-     *              Javalin app
-     */
-    private void getAllMessagesHandler(Context ctx) {
-        List<Message> messages = messageService.getAllMessages();
-        ctx.json(messages);
-    }
 
-    /**
-     * Handler to retrieve all messages by a single account.
-     * 
-     * @param ctx   data handler for HTTP requests and responses, provided the
-     *              Javalin app
-     */
-    private void getAllMessagesByAccountHandler(Context ctx) {
-        int account_id = Integer.parseInt(ctx.pathParam("account_id"));
-        List<Message> messages = messageService.getAllMessagesByAccount(account_id);
-        ctx.json(messages);
-    }
 
-    /**
-     * @param ctx   data handler for HTTP requests and responses, provided the
-     *              Javalin app
-     */
-    private void getMessageByIdHandler(Context ctx) {
-        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-        Message message = messageService.getMessage(message_id);
-        ctx.json(message);
-    }
-
+    // ACCOUNT HANDLERS //
     /**
      * Handler for registering a new account.
      * 
@@ -95,6 +65,8 @@ public class SocialMediaController {
      * 
      * @param ctx   data handler for HTTP requests and responses, provided the
      *              Javalin app
+     * @throws JsonProcessingException  if there's an issue converting JSON
+     *                                  into an object
      */
     private void postRegisterAccountHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -120,6 +92,52 @@ public class SocialMediaController {
         }
     }
 
+
+
+    // MESSAGE HANDLERS //
+    /**
+     * Handler to retrieve all messages.
+     * 
+     * @param ctx   data handler for HTTP requests and responses, provided the
+     *              Javalin app
+     */
+    private void getAllMessagesHandler(Context ctx) {
+        List<Message> messages = messageService.getAllMessages();
+        ctx.json(messages);
+    }
+
+    /**
+     * Handler to retrieve all messages by a single account.
+     * 
+     * @param ctx   data handler for HTTP requests and responses, provided the
+     *              Javalin app
+     */
+    private void getAllMessagesByAccountHandler(Context ctx) {
+        int account_id = Integer.parseInt(ctx.pathParam("account_id"));
+        List<Message> messages = messageService.getAllMessagesByAccount(account_id);
+        ctx.json(messages);
+    }
+
+    /**
+     * Handler to recieve a specific message by its ID.
+     * 
+     * Even if the message with specified ID doesn't exist (and thus can't be
+     * retrieved), the API will return a 200 message (OK).
+     * 
+     * @param ctx   data handler for HTTP requests and responses, provided the
+     *              Javalin app
+     */
+    private void getMessageByIdHandler(Context ctx) {
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message message = messageService.getMessage(message_id);
+
+        if(message != null) {
+            ctx.json(message);
+        } else {
+            ctx.status(200);
+        }
+    }
+
     /**
      * Handler for posting a new message.
      * 
@@ -132,8 +150,10 @@ public class SocialMediaController {
      * 
      * @param ctx   data handler for HTTP requests and responses, provided the
      *              Javalin app
+     * @throws JsonProcessingException  if there's an issue converting JSON
+     *                                  into an object
      */
-    private void postMessageHandler(Context ctx) throws JsonProcessingException {
+    private void postCreateMessageHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
 
@@ -156,15 +176,27 @@ public class SocialMediaController {
      * @param ctx   data handler for HTTP requests and responses, provided the
      *              Javalin app
      */
-    private void putMessageHandler(Context ctx) throws JsonProcessingException {
+    private void putUpdateMessageHandler(Context ctx) throws JsonProcessingException {
 
     }
 
     /**
+     * Handler for deleting a message.
+     * 
+     * Even if the message with specified ID doesn't exist (and thus can't be
+     * deleted), the API will return a 200 message (OK).
+     * 
      * @param ctx   data handler for HTTP requests and responses, provided the
      *              Javalin app
      */
     private void deleteMessageHandler(Context ctx) {
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message message = messageService.deleteMessageById(message_id);
 
+        if(message != null) {
+            ctx.json(message);
+        } else {
+            ctx.status(200);
+        }
     }
 }
