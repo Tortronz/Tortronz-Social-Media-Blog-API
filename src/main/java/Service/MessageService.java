@@ -87,8 +87,7 @@ public class MessageService {
      *          wasn't successfully updated
      */
     public Message updateMessageText(int message_id, Message message) {
-        this.messageDAO.updateMessageTextById(message_id, message);
-        return this.messageDAO.getMessageById(message_id);
+        return this.messageDAO.updateMessageTextById(message_id, message);
     }
 
     // DELETE OPERATIONS

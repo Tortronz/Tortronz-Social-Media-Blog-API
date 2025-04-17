@@ -1,6 +1,7 @@
 package Controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,7 +45,7 @@ public class SocialMediaController {
         app.get("/accounts/{account_id}/messages", this::getAllMessagesByAccountHandler);
         app.get("/messages/{message_id}", this::getMessageByIdHandler);
         app.post("/messages", this::postCreateMessageHandler);
-        app.put("/messages/{message_id}", this::putUpdateMessageHandler);
+        app.patch("/messages/{message_id}", this::patchUpdateMessageHandler);
         app.delete("/messages/{message_id}", this::deleteMessageHandler);
 
         return app;
@@ -113,7 +114,7 @@ public class SocialMediaController {
      *              Javalin app
      */
     private void getAllMessagesByAccountHandler(Context ctx) {
-        int account_id = Integer.parseInt(ctx.pathParam("account_id"));
+        int account_id = Integer.parseInt(Objects.requireNonNull(ctx.pathParam("account_id")));
         List<Message> messages = messageService.getAllMessagesByAccount(account_id);
         ctx.json(messages);
     }
@@ -128,7 +129,7 @@ public class SocialMediaController {
      *              Javalin app
      */
     private void getMessageByIdHandler(Context ctx) {
-        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        int message_id = Integer.parseInt(Objects.requireNonNull(ctx.pathParam("message_id")));
         Message message = messageService.getMessage(message_id);
 
         if(message != null) {
@@ -173,11 +174,42 @@ public class SocialMediaController {
     }
 
     /**
+     * Handler for updating the body text of a pre-existing message.
+     * 
+     * The message's updated body text must not be be blank, nor exceed 253
+     * characters in length (though the column of the database has a size of
+     * 255 bytes, the last 2 bytes are reserved for storing size). Failing to
+     * meet these requirements will cancel the PATCH and the API will return a
+     * 400 message (client error).
+     * 
      * @param ctx   data handler for HTTP requests and responses, provided the
      *              Javalin app
+     * @throws JsonProcessingException  if there's an issue converting JSON
+     *                                  into an object
      */
-    private void putUpdateMessageHandler(Context ctx) throws JsonProcessingException {
+    private void patchUpdateMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        int message_id = Integer.parseInt(Objects.requireNonNull(ctx.pathParam("message_id")));
 
+        // Check new message text isn't blank
+        if(message.getMessage_text() == "") {
+            ctx.status(400);
+            return;
+        }
+        // Check new message text isn't more than 253 characters
+        if(message.getMessage_text().length() > 253) {
+            ctx.status(400);
+            return;
+        }
+        
+        Message updatedMessage = messageService.updateMessageText(message_id, message);
+
+        if(updatedMessage != null){
+            ctx.json(mapper.writeValueAsString(updatedMessage));
+        }else{
+            ctx.status(400);
+        }
     }
 
     /**
@@ -190,7 +222,7 @@ public class SocialMediaController {
      *              Javalin app
      */
     private void deleteMessageHandler(Context ctx) {
-        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        int message_id = Integer.parseInt(Objects.requireNonNull(ctx.pathParam("message_id")));
         Message message = messageService.deleteMessageById(message_id);
 
         if(message != null) {

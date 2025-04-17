@@ -189,22 +189,32 @@ public class MessageDAO {
      * @param message_id    ID of the message we want to update
      * @param message       Message object with new text to replace the old
      *                      message text with
+     * @return  The message that was updated, or "null" if the message wasn't
+     *          updated.
      */
-    public void updateMessageTextById(int message_id, Message message) {
+    public Message updateMessageTextById(int message_id, Message message) {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
             // Make SQL statement and execute it
-            String sql = "UPDATE message SET text = ? WHERE message_id = ?";
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setString(1, message.getMessage_text());
             ps.setInt(2, message_id);
 
             ps.executeUpdate();
+
+            Message updatedMessage = getMessageById(message_id);
+
+            if (ps.getUpdateCount() == 1) {
+                return updatedMessage;
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        return null;
     }
 
 
