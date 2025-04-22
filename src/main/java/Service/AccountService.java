@@ -1,12 +1,14 @@
 package Service;
 
+import java.util.List;
+
 import DAO.AccountDAO;
 import Model.Account;
+import Model.Message;
 
 /**
- * This is a Service class that acts between the web/database layer
- * (controller) of the "account" table and the persistence layer (DAO) of the
- * "Account" Java class.
+ * This is a Service class that acts between the endpoints (controller) and the
+ * database (DAO) of the "Account" Java class.
  */
 public class AccountService {
     public AccountDAO accountDAO;
@@ -40,5 +42,18 @@ public class AccountService {
      */
     public Account registerAccount(Account account) {
         return this.accountDAO.insertAccount(account);
+    }
+
+    // READ OPERATIONS //
+    /**
+     * This authorizes/logs in an account.
+     * 
+     * @param account   The account credientials attempting to log in
+     * 
+     * @return  Account if it was successfully logged in, or "null" if it
+     *          wasn't successfully logged in
+     */
+    public Account loginAccount(Account account) {
+        return this.accountDAO.getAccount(account);
     }
 }

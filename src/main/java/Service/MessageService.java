@@ -6,9 +6,8 @@ import DAO.MessageDAO;
 import Model.Message;
 
 /**
- * This is a Service class that acts between the web/database layer
- * (controller) of the "message" table and the persistence layer (DAO) of the
- * "message" Java class.
+ * This is a Service class that acts between the endpoints (controller) and the
+ * database (DAO) of the "Message" Java class.
  */
 public class MessageService {
     public MessageDAO messageDAO;

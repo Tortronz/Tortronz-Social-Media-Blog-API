@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import Model.Account;
-
 import Util.ConnectionUtil;
 
 /**
@@ -19,6 +18,44 @@ import Util.ConnectionUtil;
  * password     varchar(255)    Login for account
  */
 public class AccountDAO {
+    /**
+     * This authorizes/logs in an account.
+     * 
+     * @param account   The account credientials attempting to log in
+     * 
+     * @return  The successfully logged in account, or "null" if login failed
+     */
+    public Account getAccount(Account account) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            // Make SQL statement and execute it
+            String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(1, account.getUsername());
+            ps.setString(2, account.getPassword());
+
+            ResultSet rs = ps.executeQuery();
+
+
+            // Store retrieved message and return it
+            if(rs.next()){
+                Account legitAccount = new Account(
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3));
+                return legitAccount;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;    // Occurs if retrieval failed
+    }
+
+
+
     /**
      * This registers/inserts a new account into the "account" database table.
      * 

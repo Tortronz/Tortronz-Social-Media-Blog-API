@@ -31,6 +31,7 @@ public class MessageDAO {
      * it's auto-incremented.
      * 
      * @param message   The new message being created
+     * 
      * @return  The successfully created message, or "null" if creation
      *          failed
      */
@@ -110,6 +111,7 @@ public class MessageDAO {
      * Gets all messages in chronological post order by one account.
      * 
      * @param account_id    ID of the account that we want all messages from
+     * 
      * @return  Arraylist of all messages by one account
      */
     public List<Message> getAllMessagesByAccountId(int account_id) {
@@ -148,6 +150,7 @@ public class MessageDAO {
      * Gets message with the corresponding ID.
      * 
      * @param message_id    ID of the message that we want
+     * 
      * @return  Singular message with the specified ID, or "null" if retrieval
      *          failed
      */
@@ -189,6 +192,7 @@ public class MessageDAO {
      * @param message_id    ID of the message we want to update
      * @param message       Message object with new text to replace the old
      *                      message text with
+     * 
      * @return  The message that was updated, or "null" if the message wasn't
      *          updated.
      */
@@ -224,6 +228,7 @@ public class MessageDAO {
      * Deletes message with the corresponding ID.
      * 
      * @param message_id    ID of the message that we want to delete
+     * 
      * @return  The message that was deleted, or "null" if the message wasn't
      *          deleted
      */

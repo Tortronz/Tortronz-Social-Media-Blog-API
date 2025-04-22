@@ -39,6 +39,7 @@ public class SocialMediaController {
 
         // Account Handlers
         app.post("/register", this::postRegisterAccountHandler);
+        app.post("/login", this::postLoginAccountHandler);
 
         // Message Handlers
         app.get("/messages", this::getAllMessagesHandler);
@@ -90,6 +91,31 @@ public class SocialMediaController {
             ctx.json(mapper.writeValueAsString(addedAccount));
         }else{
             ctx.status(400);
+        }
+    }
+
+    /**
+     * Handler to authorize/log in accounts.
+     * 
+     * If AccountService returns a null account (meaning login was
+     * unsuccessful, such as due to an invalid username or password), the API
+     * will return a 401 message (unauthorized error).
+     * 
+     * @param ctx   data handler for HTTP requests and responses, provided the
+     *              Javalin app
+     * @throws JsonProcessingException  if there's an issue converting JSON
+     *                                  into an object
+     */
+    private void postLoginAccountHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(ctx.body(), Account.class);
+
+        Account legitAccount = accountService.loginAccount(account);
+
+        if(legitAccount != null){
+            ctx.json(mapper.writeValueAsString(legitAccount));
+        }else{
+            ctx.status(401);
         }
     }
 
