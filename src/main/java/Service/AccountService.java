@@ -1,10 +1,7 @@
 package Service;
 
-import java.util.List;
-
 import DAO.AccountDAO;
 import Model.Account;
-import Model.Message;
 
 /**
  * This is a Service class that acts between the endpoints (controller) and the
