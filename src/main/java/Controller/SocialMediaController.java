@@ -74,17 +74,6 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(ctx.body(), Account.class);
 
-        // Check username isn't blank
-        if(account.getUsername() == "") {
-            ctx.status(400);
-            return;
-        }
-        // Check password is more than 4 characters
-        if(account.getPassword().length() < 4) {
-            ctx.status(400);
-            return;
-        }
-
         Account addedAccount = accountService.registerAccount(account);
 
         if(addedAccount != null){
@@ -184,12 +173,6 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
 
-        // Check message text isn't blank
-        if(message.getMessage_text() == "") {
-            ctx.status(400);
-            return;
-        }
-
         Message addedMessage = messageService.createMessage(message);
 
         if(addedMessage != null){
@@ -217,17 +200,6 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(ctx.body(), Message.class);
         int message_id = Integer.parseInt(Objects.requireNonNull(ctx.pathParam("message_id")));
-
-        // Check new message text isn't blank
-        if(message.getMessage_text() == "") {
-            ctx.status(400);
-            return;
-        }
-        // Check new message text isn't more than 253 characters
-        if(message.getMessage_text().length() > 253) {
-            ctx.status(400);
-            return;
-        }
         
         Message updatedMessage = messageService.updateMessageText(message_id, message);
 

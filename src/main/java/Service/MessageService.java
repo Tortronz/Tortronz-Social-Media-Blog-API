@@ -7,7 +7,7 @@ import Model.Message;
 
 /**
  * This is a Service class that acts between the endpoints (controller) and the
- * database (DAO) of the "Message" Java class.
+ * database (DAO) of the "Message" Java class, validating input.
  */
 public class MessageService {
     public MessageDAO messageDAO;
@@ -37,9 +37,14 @@ public class MessageService {
      * @param message   The new message to be created
      * 
      * @return  Message if it was successfully persisted, or "null" if it
-     *          wasn't successfully persisted
+     *          wasn't successfully persisted  or if new message text is blank
      */
     public Message createMessage(Message message) {
+        // Check message text isn't blank
+        if(message.getMessage_text() == "") {
+            return null;
+        }
+
         return this.messageDAO.insertMessage(message);
     }
 
@@ -83,9 +88,19 @@ public class MessageService {
      *                      message text with
      * 
      * @return  Message if it was successfully updated, or "null" if it
-     *          wasn't successfully updated
+     *          wasn't successfully updated or if updated messaged text is
+     *          blank or too long
      */
     public Message updateMessageText(int message_id, Message message) {
+        // Check new message text isn't blank
+        if(message.getMessage_text() == "") {
+            return null;
+        }
+        // Check new message text isn't more than 253 characters
+        if(message.getMessage_text().length() > 253) {
+            return null;
+        }
+
         return this.messageDAO.updateMessageTextById(message_id, message);
     }
 

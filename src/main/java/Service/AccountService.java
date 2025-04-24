@@ -5,7 +5,7 @@ import Model.Account;
 
 /**
  * This is a Service class that acts between the endpoints (controller) and the
- * database (DAO) of the "Account" Java class.
+ * database (DAO) of the "Account" Java class, validating input.
  */
 public class AccountService {
     public AccountDAO accountDAO;
@@ -35,9 +35,19 @@ public class AccountService {
      * @param account   The new account to be registered
      * 
      * @return  Account if it was successfully persisted, or "null" if it
-     *          wasn't successfully persisted
+     *          wasn't successfully persisted or if username or password were
+     *          invalid
      */
     public Account registerAccount(Account account) {
+        // Check username isn't blank
+        if(account.getUsername() == "") {
+            return null;
+        }
+        // Check password is more than 4 characters
+        if(account.getPassword().length() < 4) {
+            return null;
+        }
+
         return this.accountDAO.insertAccount(account);
     }
 
