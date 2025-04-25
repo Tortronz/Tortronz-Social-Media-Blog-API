@@ -38,10 +38,15 @@ public class MessageService {
      * 
      * @return  Message if it was successfully persisted, or "null" if it
      *          wasn't successfully persisted  or if new message text is blank
+     *          or too long
      */
     public Message createMessage(Message message) {
         // Check message text isn't blank
         if(message.getMessage_text() == "") {
+            return null;
+        }
+        // Check message text isn't more than 253 characters
+        if(message.getMessage_text().length() > 253) {
             return null;
         }
 

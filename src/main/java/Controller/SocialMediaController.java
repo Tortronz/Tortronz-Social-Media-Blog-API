@@ -157,9 +157,11 @@ public class SocialMediaController {
     /**
      * Handler for posting a new message.
      * 
-     * The text content of the message can't be blank. Failing to meet this
-     * requirement will cancel the POST and the API will return a 400 message
-     * (client error).
+     * The text content of the message can't be blank, nor exceed 253
+     * characters in length (though the column of the database has a size of
+     * 255 bytes, the last 2 bytes are reserved for storing size). Failing to
+     * meet these requirements will cancel the POST and the API will return a
+     * 400 message (client error).
      * 
      * If MessageService returns a null message (meaning posting an Message was
      * unsuccessful), the API will return a 400 message (client error).
