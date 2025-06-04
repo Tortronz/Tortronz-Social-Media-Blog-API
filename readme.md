@@ -2,7 +2,9 @@
 
 ## Forward
 
-This was a project exercise provided by Revature for me to complete. Revature already setup the configuration (pom.xml and ConnectionUtil.java), database tables, the classes modeling the database objects (Account.java and Message.java), and the integration tests. I was responsible for designing the backend API for a messaging social media app, which includes the data access objects that interacted with the database through SQL queries (AccountDao.java and MessageDAO.java), the service classes that applied business logic and input validation (AccountService.java and MessageService.java), and the controller class that exposed the endpoints and provided proper responses (SocialMediaController.java). Following the concept of Test-Driven Development (TDD), I not only had to design the backend to the specificatons written out by Revature (which can seen below), but I also had to ensure they passed the tests they provided.
+This was a project exercise provided by Revature for me to complete. Revature already setup the configuration (pom.xml and ConnectionUtil.java), database tables, the classes modeling the database objects (Account.java and Message.java), and the integration tests. I was responsible for designing the backend API for a messaging social media app, which includes the data access objects that interacted with the database through SQL queries (AccountDao.java and MessageDAO.java), the service classes that applied business logic and input validation (AccountService.java and MessageService.java), and the controller class that exposed the endpoints and provided proper responses (SocialMediaController.java).
+
+Following the concept of Test-Driven Development (TDD), I not only had to design the backend to the specificatons written out by Revature (which can seen below), but I also had to ensure they passed the tests they provided.
 
 ## Background 
 
