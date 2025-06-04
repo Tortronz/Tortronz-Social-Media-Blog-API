@@ -1,4 +1,8 @@
-# Project: Social media blog API
+# Project: Social Media Blog API
+
+## Forward
+
+This was a project exercise provided by Revature for me to complete. Revature already setup the configuration (pom.xml and ConnectionUtil.java), database tables, the classes modeling the database objects (Account.java and Message.java), and the integration tests. I was responsible for designing the backend API for a messaging social media app, which includes the data access objects that interacted with the database through SQL queries (AccountDao.java and MessageDAO.java), the service classes that applied business logic and input validation (AccountService.java and MessageService.java), and the controller class that exposed the endpoints and provided proper responses (SocialMediaController.java). Following the concept of Test-Driven Development (TDD), I not only had to design the backend to the specificatons written out by Revature (which can seen below), but I also had to ensure they passed the tests they provided.
 
 ## Background 
 
@@ -91,5 +95,3 @@ The .sql script found in src/main/resources is already complete and SHOULD NOT B
 You SHOULD be changing the SocialMediaController class to add endpoints to the StartAPI method. A main method in Main.java is also provided to allow you to run the entire application and manually play or test with the app. Changing that class will not affect the test cases at all. You could use it to perform any manual unit testing on your other classes.
 
 You SHOULD be creating and designing DAO and Service class to allow you to complete the project. In theory, you could design the project however you like, so long as the functionality works and you are somehow persisting data to the database - but a 3-layer architecture is a robust design pattern and following help you in the long run. You can refer to prior mini-projects and course material for help on designing your application in this way.
-
-# Good luck!
